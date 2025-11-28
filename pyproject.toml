@@ -1,0 +1,15 @@
+[tool.pyright]
+typeCheckingMode = "basic"
+
+[tool.pytest.ini_options]
+addopts = "-vv -rA --color=yes"
+
+[tool.coverage.run]
+omit = ["*_test.py"]
+
+[tool.autopep8]
+max_line_length = 100
+ignore = [
+    "E70",  # Put semicolon-separated compound statement on separate lines.
+    "E302", # Add missing 2 blank lines.
+]
