@@ -150,7 +150,7 @@ def str_of_comm(depth: int, c: comm) -> str:
         case Raise(exn=exn, exps=exps):
             return (
                     newline(depth) + "raise " + exn +
-                    "(" + ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")"
+                    (("(" + ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")") if exps else "")
             )
         case TryExcept(body=body, exn=exn, name=name, handler=handler):
             return (
