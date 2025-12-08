@@ -170,8 +170,9 @@ def str_of_comm(depth: int, c: comm) -> str:
 
 
 def str_of_block(depth: int, b: block) -> str:
-    raise NotImplementedError # TODO Replace this line with your code
-
+    match b:
+        case(ds, c):
+            return str_of_decls(ds, depth) + str_of_comm(depth, c)
 
 def str_of_decl(depth: int, d: decl) -> str:
     match d:
