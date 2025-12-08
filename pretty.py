@@ -29,7 +29,16 @@ def str_of_typ(t: typ) -> str:
             return "str"
         case ListType(ty=ty):
             return "list[" + str_of_typ(ty) + "]"
-        # TODO Add missing cases
+        case TupleType(tys=tys):
+            return "tuple[]" + ", ".join(map(str_of_typ, tys)) + "]"
+        case UnionType(tys=tys):
+            return " | ".join(map(str_of_typ, tys))
+        case FunType(argtypes=arg, returns=ret):
+            return "Callable [[" + ", ".join(map(str_of_typ, arg)) + "], " + str_of_typ(ret) + "]"
+        case ParamType(id=id, tys=tys):
+            return id + "[" + ", ".join(map(str_of_typ, tys)) + "]"
+        case TypeName(id=id):
+            return id
         case _:
             raise NotImplementedError
 
