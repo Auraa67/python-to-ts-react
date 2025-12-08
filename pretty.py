@@ -126,7 +126,39 @@ def str_of_comm(depth: int, c: comm) -> str:
                     str_of_block(depth + 1, body) +
                     newline(depth) + "else:" +
                     str_of_block(depth + 1, orelse))
-        # TODO Add missing cases
+        case MatchList(subject=subject, ifempty=ifempty, hd=hd, tl=tl, orelse=orelse):
+            return (
+                    newline(depth) + "match " + str_of_exp(subject, paren=False) + ":" +
+                    newline(depth + 1) + "case [" + hd + ", *" + tl + "]:" +
+                    str_of_block(depth + 2, orelse) +
+                    newline(depth + 1) + "case []:" +
+                    str_of_block(depth + 2, ifempty)
+            )
+        case MatchData(subject=subject, cases=cases):
+            return (
+                    newline(depth) + "match " + str_of_exp(subject, paren=False) + ":" +
+                    "".join(map(lambda c: 
+                    newline(depth + 1) + "case " + c[0] + "(" +
+                    ", ".join(map(lambda b: b[0] + "=" + b[1], c[1])) + "):" + 
+                    str_of_block(depth + 2, c[2]), cases))
+            )
+        case Return(value=value):
+            return (
+                    newline(depth) + "return " +
+                    str_of_exp(value, paren=False)
+            )
+        case Raise(exn=exn, exps=exps):
+            return (
+                    newline(depth) + "raise " + exn +
+                    "(" + ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")"
+            )
+        case TryExcept(body=body, exn=exn, name=name, handler=handler):
+            return (
+                    newline(depth) + "try:" +
+                    str_of_block(depth + 1, body) + 
+                    newline(depth) + "except " + exn + " as " + name + ":" +
+                    str_of_block(depth + 1, handler)
+            )
         case CommRegion(contents=e1, reg=r):
             try:
                 return str_of_comm(depth, e1)
