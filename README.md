@@ -33,8 +33,28 @@ Structures : FunDef (fonctions typées), DataClass (@dataclass), TypeAlias.
 
 Environnement : Import, ImportFrom, TypedVar, InitVar.
 
-Prérequis
-Python 3.10 ou supérieur (requis pour le support natif du match).
-
 Tests et Validation
-Le projet a été validé sur une suite de fichiers de tests complexes fournit et a compilé avec succès via Makefile
+
+Le projet compile et s'exécute avec succès via le Makefile. La validation a été effectuée à la fois sur les tests fournis et sur mes tests personnels (dans le répertoire my_test), qui ont tous été passés avec succès.
+
+Voici un guide rapide à ajouter à votre documentation ou pour votre propre usage :
+
+Guide de Tests Rapide
+
+NB: les tests se trouvent dans le dossier Examples.
+
+1. Lancer la suite de tests fournie (Makefile) Pour exécuter automatiquement la validation sur les fichiers de tests par défaut :
+
+make
+
+Cela génère les sorties et vérifie la correspondance des arbres syntaxiques (AST).
+
+2. Lancer les tests personnels (my_test/):
+
+Visualiser le code généré :
+
+python3 main.py --pretty my_test/points.py
+
+Vérifier et exécuter le résultat (Test complet) :
+
+python3 main.py --pretty my_test/points.py | python3
