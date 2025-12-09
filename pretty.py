@@ -180,7 +180,26 @@ def str_of_decl(depth: int, d: decl) -> str:
             return (newline(depth) + id + " = " + str_of_exp(value, paren=False))
         case TypedVar(id=id, ty=ty, value=value):
             return (newline(depth) + id + ": " + str_of_typ(ty) + " = " + str_of_exp(value, paren=False))
-        # TODO Add missing cases
+        case Import(module=module):
+            return newline(depth) + "import " + module
+        case ImportFrom(module=module, names=names):
+            return newline(depth) + "from " + module + " import " + ", ".join(names)
+        case InitVars(ids=ids, value=value):
+            return newline(depth) + "(" + ", ".join(ids) + ") = " + str_of_exp(value, paren=False)
+        case FunDef(id=id, tps=tps, args=args, ret=ret, body=body):
+            if tps == []:
+                return newline(depth) + "def " + id + "(" + ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args)) + ") -> " + str_of_typ(ret) + ":" + str_of_block(depth + 1, body)
+            else:
+                return newline(depth) + "def " + id + "[" + ", ".join(tps) + "]" + "(" + ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args)) + ") -> " + str_of_typ(ret) + ":" + str_of_block(depth + 1, body)
+        case DataClass(id=id, tps=tps, fields=fields):
+            checking_fields = newline(depth + 1).join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), fields)) if fields else "pass"
+            if tps == []:
+                return newline(depth) + "@dataclass" + newline(depth) + "class " + id + ":" + newline(depth + 1) + checking_fields
+            else:
+                return newline(depth) + "@dataclass" + newline(depth) + "class " + id + "[" + ", ".join(tps) + "]:" + newline(depth + 1) + checking_fields
+        case TypeAlias(id=id, tps=tps, ty=ty):
+            check_tps = "[" + ", ".join(tps)  + "]" if tps else ""
+            return newline(depth) + "type " + id + check_tps + " = " + str_of_typ(ty)
         case DeclRegion(contents=d1, reg=r):
             try:
                 return str_of_decl(depth, d1)
