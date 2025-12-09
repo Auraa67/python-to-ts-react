@@ -94,10 +94,8 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
         case Subscript(value=value, index=index):
             return str_of_exp(value) + "[" + str_of_exp(index, paren=False) + "]"
         case Slice(value=value, lower=lower, upper=upper):
-            if upper is None:
-                return str_of_exp(value) + "[" + str_of_exp(lower, paren=False) + ":" + "]"
-            else:
-                return str_of_exp(value) + "[" + str_of_exp(lower, paren=False) + ":" + str_of_exp(upper, paren=False) + "]"
+            upper_validity = str_of_exp(upper, paren=False) if upper is not None else ""
+            return str_of_exp(value) + "[" + str_of_exp(lower, paren=False) + ":" + upper_validity + "]"
         case Spread(operand=operand):
             return "*" + str_of_exp(operand)
         case Record(id=id, kwargs=kwargs):
@@ -105,7 +103,10 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
         case Field(id=id, attr=attr):
             return id + "." + attr
         case Replace(value=value, kwargs=kwargs):
-            return par("replace(" + str_of_exp(value, paren=False) + ", " + ", ".join(map(lambda x: x[0] + "=" + str_of_exp(x[1], paren=False), kwargs)) + ")")
+            return (
+                    par("replace(" + str_of_exp(value, paren=False) + ", " + ", ".join(map(lambda x: x[0] + "="
+                    + str_of_exp(x[1], paren=False), kwargs)) + ")")
+            )
         case ExpRegion(contents=e1, reg=r):
             try:
                 return str_of_exp(e1, paren)
@@ -151,8 +152,10 @@ def str_of_comm(depth: int, c: comm) -> str:
             )
         case Raise(exn=exn, exps=exps):
             if exps:
-                return (newline(depth) + "raise " + exn + "(" + 
-                ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")")
+                return (
+                        newline(depth) + "raise " + exn + "(" + 
+                        ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")"
+                )
             else:
                 return newline(depth) + "raise " + exn
         case TryExcept(body=body, exn=exn, name=name, handler=handler):
@@ -189,16 +192,19 @@ def str_of_decl(depth: int, d: decl) -> str:
         case InitVars(ids=ids, value=value):
             return newline(depth) + "(" + ", ".join(ids) + ") = " + str_of_exp(value, paren=False)
         case FunDef(id=id, tps=tps, args=args, ret=ret, body=body):
-            if tps == []:
-                return newline(depth) + "def " + id + "(" + ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args)) + ") -> " + str_of_typ(ret) + ":" + str_of_block(depth + 1, body)
-            else:
-                return newline(depth) + "def " + id + "[" + ", ".join(tps) + "]" + "(" + ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args)) + ") -> " + str_of_typ(ret) + ":" + str_of_block(depth + 1, body)
+            join_bracket_tps = "[" + ", ".join(tps) + "]" if tps else ""
+            return (
+                    newline(depth) + "def " + id + join_bracket_tps + "(" + ", ".join(map(lambda x: x[0] +
+                    ": " + str_of_typ(x[1]), args)) + ") -> " + str_of_typ(ret) +
+                    ":" + str_of_block(depth + 1, body)       
+            )
         case DataClass(id=id, tps=tps, fields=fields):
-            checking_fields = newline(depth + 1).join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), fields)) if fields else "pass"
-            if tps == []:
-                return newline(depth) + "@dataclass" + newline(depth) + "class " + id + ":" + newline(depth + 1) + checking_fields
-            else:
-                return newline(depth) + "@dataclass" + newline(depth) + "class " + id + "[" + ", ".join(tps) + "]:" + newline(depth + 1) + checking_fields
+            fields_validity = newline(depth + 1).join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), fields)) if fields else "pass"
+            join_bracket_tps = "[" + ", ".join(tps) + "]" if tps else ""
+            return (
+                    newline(depth) + "@dataclass" + newline(depth) + "class " + id + join_bracket_tps 
+                    + ":" + newline(depth + 1) + fields_validity
+            )
         case TypeAlias(id=id, tps=tps, ty=ty):
             check_tps = "[" + ", ".join(tps)  + "]" if tps else ""
             return newline(depth) + "type " + id + check_tps + " = " + str_of_typ(ty)
