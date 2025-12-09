@@ -30,11 +30,11 @@ def str_of_typ(t: typ) -> str:
         case ListType(ty=ty):
             return "list[" + str_of_typ(ty) + "]"
         case TupleType(tys=tys):
-            return "tuple[]" + ", ".join(map(str_of_typ, tys)) + "]"
+            return "tuple[" + ", ".join(map(str_of_typ, tys)) + "]"
         case UnionType(tys=tys):
-            return " | ".join(map(str_of_typ, tys))
+            return " | ".join(map(str_of_typ, tys))
         case FunType(argtypes=arg, returns=ret):
-            return "Callable [[" + ", ".join(map(str_of_typ, arg)) + "], " + str_of_typ(ret) + "]"
+            return "Callable[[" + ", ".join(map(str_of_typ, arg)) + "], " + str_of_typ(ret) + "]"
         case ParamType(id=id, tys=tys):
             return id + "[" + ", ".join(map(str_of_typ, tys)) + "]"
         case TypeName(id=id):
@@ -88,7 +88,7 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
         case Lambda(args=args, body=body):
             return par("lambda " + ", ".join(args) + ": " + str_of_exp(body, paren=False))
         case Tuple(exps=exps):
-            return par(", ".join(map(str_of_exp, exps)))
+            return "(" + ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + ")"
         case List(exps=exps):
             return "[" + ", ".join(map(lambda x: str_of_exp(x, paren=False), exps)) + "]"
         case Subscript(value=value, index=index):
@@ -131,16 +131,18 @@ def str_of_comm(depth: int, c: comm) -> str:
                     newline(depth) + "match " + str_of_exp(subject, paren=False) + ":" +
                     newline(depth + 1) + "case [" + hd + ", *" + tl + "]:" +
                     str_of_block(depth + 2, orelse) +
-                    newline(depth + 1) + "case []:" +
+                    newline(depth + 1) + "case _:" +
                     str_of_block(depth + 2, ifempty)
             )
         case MatchData(subject=subject, cases=cases):
             return (
                     newline(depth) + "match " + str_of_exp(subject, paren=False) + ":" +
                     "".join(map(lambda c: 
-                    newline(depth + 1) + "case " + c[0] + "(" +
+                    (newline(depth + 1) + "case _:" + str_of_block(depth + 2, c[2]))
+                    if c[0] == "_" else 
+                    (newline(depth + 1) + "case " + c[0] + "(" +
                     ", ".join(map(lambda b: b[0] + "=" + b[1], c[1])) + "):" + 
-                    str_of_block(depth + 2, c[2]), cases))
+                    str_of_block(depth + 2, c[2])), cases))
             )
         case Return(value=value):
             return (
