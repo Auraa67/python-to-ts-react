@@ -155,7 +155,14 @@ def str_of_comm(depth: int, c: comm) -> str:
                     newline(depth) + "} else {" +
                     str_of_block(depth + 1, orelse) +
                     newline(depth) + "}")
-        # TODO Add missing cases
+        case MatchList(subject=subject, ifempty=ifempty, hd=hd, tl=tl, orelse=orelse):
+            return (
+                newline(depth) + "if (" + str_of_exp(subject)+ ".length === 0) {" +
+                str_of_block(depth + 1, ifempty) + newline(depth) + "} else {" + newline(depth + 1) +
+                "const " + hd + "= " + str_of_exp(subject) + "[0];" + newline(depth + 1) +
+                "const " + tl + "= " + str_of_exp(subject) + ".slice(1);" +
+                str_of_block(depth + 1, orelse) + newline(depth) + "}"
+            )
         case CommRegion(contents=e1, reg=r):
             try:
                 return str_of_comm(depth, e1)
