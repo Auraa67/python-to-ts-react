@@ -53,7 +53,20 @@ def str_of_typ(t: typ) -> str:
             return "string"
         case ListType(ty=ty):
             return str_of_typ(ty) + "[]"
-        # TODO Add missing cases
+        case TupleType(tys=tys):
+            return  "[" + ", ".join(map(str_of_typ, tys)) + "]"
+        case UnionType(tys=tys):
+            return " | ".join(map(str_of_typ, tys))
+        case FunType(argtypes=argtypes, returns=returns):
+            args_string = map(
+                lambda i: f"arg{i}: {str_of_typ(argtypes[i])}",
+                range(len(argtypes))
+            )
+            return "(" + ", ".join(args_string) + ") => " + str_of_typ(returns)
+        case ParamType(id=id, tys=tys):
+            return id + "<" + ", ".join(map(str_of_typ, tys)) + ">"
+        case TypeName(id=id):
+            return id
         case _:
             raise NotImplementedError
 
