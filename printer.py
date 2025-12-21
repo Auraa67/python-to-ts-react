@@ -95,7 +95,42 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
             return par(str_of_exp(e1) + " === " + str_of_exp(e2))
         case Equal(left=e1, right=e2):
             return par(str_of_exp(e1) + " == " + str_of_exp(e2))
-        # TODO Add missing cases
+        case Less(left=left, right=right):
+            return par(str_of_exp(left) + " < " + str_of_exp(right))
+        case LessEq(left=left, right=right):
+            return par(str_of_exp(left) + " <= " + str_of_exp(right))
+        case Greater(left=left, right=right):
+            return par(str_of_exp(left) + " > " + str_of_exp(right))
+        case GreaterEq(left=left, right=right):
+            return par(str_of_exp(left) + " >= " + str_of_exp(right))
+        case And(left=left, right=right):
+            return par(str_of_exp(left) + " && " + str_of_exp(right))
+        case Or(left=left, right=right):
+            return par(str_of_exp(left) + " || " + str_of_exp(right))
+        case Not(operand=operand):
+            return par("!" + str_of_exp(operand))
+        case Cond(value=value, test=test, orelse=orelse):
+            return par(str_of_exp(test) + " ? " + str_of_exp(value) + " : " + str_of_exp(orelse))
+        case Call(func=func, args=args):
+            return func + "(" + ", ".join(map(lambda arg: str_of_exp(arg), args)) + ")"
+        case Lambda(args=args, body=body):
+            return par("(" + ", ".join(args) + ") => " + str_of_exp(body))
+        case Tuple(exps=exps):
+            return "[" + ", ".join(map(str_of_exp, exps)) + "]"
+        case List(exps=exps):
+            return "[" + ", ".join(map(str_of_exp, exps)) + "]"
+        case Subscript(value=value, index=index):
+            return str_of_exp(value) + "[" + str_of_exp(index) + "]"
+        case Slice(value=value, lower=lower, upper=upper):
+            return str_of_exp(value) + ".slice(" + str_of_exp(lower) + ", " + (str_of_exp(upper) if upper is not None else "") + ")"
+        case Spread(operand=operand):
+            return "..." + str_of_exp(operand)
+        case Record(fields=fields):
+            return "{" + ", ".join(map(lambda kv: kv[0] + ": " + str_of_exp(kv[1]), fields)) + "}"
+        case Field(value=value, field=field):
+            return str_of_exp(value) + "." + field
+        case Replace(value=value, kwargs=kwargs):
+            return "{" + "..."+ str_of_exp(value) + ", " + ", ".join(map(lambda kv: kv[0] + ": " + str_of_exp(kv[1]), kwargs)) + "}"
         case ExpRegion(contents=e1, reg=r):
             try:
                 return str_of_exp(e1, paren)
