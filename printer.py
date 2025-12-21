@@ -122,7 +122,10 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
         case Subscript(value=value, index=index):
             return str_of_exp(value) + "[" + str_of_exp(index) + "]"
         case Slice(value=value, lower=lower, upper=upper):
-            return str_of_exp(value) + ".slice(" + str_of_exp(lower) + ", " + (str_of_exp(upper) if upper is not None else "") + ")"
+            args = [str_of_exp(lower)]
+            if upper is not None:
+                args.append(str_of_exp(upper))
+            return str_of_exp(value) + ".slice(" + ", ".join(args) + ")"
         case Spread(operand=operand):
             return "..." + str_of_exp(operand)
         case Record(fields=fields):
