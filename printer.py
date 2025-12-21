@@ -195,8 +195,10 @@ def str_of_comm(depth: int, c: comm) -> str:
 
 
 def str_of_block(depth: int, b: block) -> str:
-    raise NotImplementedError # TODO Replace this line with your codes
-
+    decls, command = b
+    s_decls = "".join(map(lambda d: str_of_decl(depth, d), decls))
+    s_comm = str_of_comm(depth, command)
+    return s_decls + s_comm
 
 def str_of_decl(depth: int, d: decl) -> str:
     match d:
