@@ -208,6 +208,8 @@ def str_of_decl(depth: int, d: decl) -> str:
             return (newline(depth) + "const " + id + ": " + str_of_typ(ty) + " = " + str_of_exp(value, paren=False))
         case Import(module=module):
             return (newline(depth) + "import * as " + module + " from \"./" + module + "\";")
+        case ImportFrom(module=module, names=names):
+            return (newline(depth) + "import { " + ", ".join(names) + " } from \"./" + module + "\";")
         # TODO Add missing cases
         case DeclRegion(contents=d1, reg=r):
             try:
