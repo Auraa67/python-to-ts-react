@@ -215,7 +215,14 @@ def str_of_decl(depth: int, d: decl) -> str:
         case FunDef(id=id, tps=tps, args=args, ret=ret, body=body):
             lists = "<" + ", ".join(tps) + ">" if tps else ""
             arguments = ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args))
-            return (newline(depth) + "function " + id + lists + "(" + arguments + "): " + str_of_typ(ret) + " {" + str_of_block(depth + 1, body) + newline(depth) + "}")
+            return (
+                newline(depth) + "function " + id + lists + "(" + arguments + "): " + str_of_typ(ret) + " {" +
+                str_of_block(depth + 1, body) + newline(depth) + "}"
+            )
+        case DataClass(id=id, tps=tps, fields=fields):
+            lists = f"<{", ".join(tps)}> " if tps else ""
+            field = "".join(map(lambda x: newline(depth + 1) + x[0] + ": " + str_of_typ(x[1]) + ";", fields))
+            return (newline(depth) + "interface " + id + lists + "{" + field + newline(depth) + "}")
         # TODO Add missing cases
         case DeclRegion(contents=d1, reg=r):
             try:
