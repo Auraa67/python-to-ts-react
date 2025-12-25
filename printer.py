@@ -210,6 +210,8 @@ def str_of_decl(depth: int, d: decl) -> str:
             return (newline(depth) + "import * as " + module + " from \"./" + module + "\";")
         case ImportFrom(module=module, names=names):
             return (newline(depth) + "import { " + ", ".join(names) + " } from \"./" + module + "\";")
+        case InitVars(ids=ids, value=value):
+            return  (newline(depth) + "let " + ", ".join(map(lambda x: x + "=" + str_of_exp(value), ids)) + ";")
         # TODO Add missing cases
         case DeclRegion(contents=d1, reg=r):
             try:
