@@ -128,10 +128,11 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
             return str_of_exp(value) + ".slice(" + ", ".join(args) + ")"
         case Spread(operand=operand):
             return "..." + str_of_exp(operand)
-        case Record(fields=fields):
-            return "{" + ", ".join(map(lambda kv: kv[0] + ": " + str_of_exp(kv[1]), fields)) + "}"
-        case Field(value=value, field=field):
-            return str_of_exp(value) + "." + field
+        case Record(id=id, kwargs=kwargs):
+            inner_fields = ", ".join(map(lambda kv: f"{kv[0]}: {str_of_exp(kv[1])}", kwargs))
+            return "{ kind: \"" + id + "\", value: { " + inner_fields + " } }"
+        case Field(id=id, attr=attr):
+            return id + "." + attr
         case Replace(value=value, kwargs=kwargs):
             return "{" + "..."+ str_of_exp(value) + ", " + ", ".join(map(lambda kv: kv[0] + ": " + str_of_exp(kv[1]), kwargs)) + "}"
         case ExpRegion(contents=e1, reg=r):

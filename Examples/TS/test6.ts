@@ -1,88 +1,71 @@
-export type MyList<A> = MyNil<A> | MyCons<A>
-
-export interface MyNil<A> {
-    type: 'MyNil'
+import { dataclass } from "./dataclasses";
+type MyList<A> = MyNil<A> | MyCons<A>;
+interface MyNil<A> {
 }
-
-export interface MyCons<A> {
-    type: 'MyCons'
-    hd: A
-    tl: MyList<A>
+interface MyCons<A> {
+    hd: A;
+    tl: MyList<A>;
 }
-
-export type Colour = Red | Black | White
-
-export interface Red {
-    type: 'Red'
+type Colour= Red | Black | White;
+interface Red{
 }
-
-export interface Black {
-    type: 'Black'
+interface Black{
 }
-
-export interface White {
-    type: 'White'
+interface White{
 }
-
-export type Tree<A, C> = Leaf<A, C> | LNode<A, C>
-
-export interface Leaf<A, C> {
-    type: 'Leaf'
-    value: A
+type Tree<A, C> = Leaf<A, C> | LNode<A, C>;
+interface Leaf<A, C> {
+    value: A;
 }
-
-export interface LNode<A, C> {
-    type: 'LNode'
-    value: C
-    left: Tree<A, C>
-    right: Tree<A, C>
+interface LNode<A, C> {
+    value: C;
+    left: Tree<A, C>;
+    right: Tree<A, C>;
 }
-
-export function toInt(c: Colour): number {
-    switch (c.type) {
-        case 'Red': {
-            return 0
-        }
-        case 'Black': {
-            return 1
-        }
-        case 'White': {
-            return 2
-        }
+function toInt(c: Colour): number {
+    if (c.kind === "Red") {
+        const  = c.value;
+        
+        return 0;
+    } else if (c.kind === "Black") {
+        const  = c.value;
+        
+        return 1;
+    } else if (c.kind === "White") {
+        const  = c.value;
+        
+        return 2;
     }
 }
-
-export function length<A>(l: MyList<A>): number {
-    switch (l.type) {
-        case 'MyNil': {
-            return 0
-        }
-        case 'MyCons': {
-            const { tl: t } = l
-            return 1 + length(t)
-        }
+function length<A>(l: MyList<A>): number {
+    if (l.kind === "MyNil") {
+        const  = l.value;
+        
+        return 0;
+    } else if (l.kind === "MyCons") {
+        const hd: _, tl: t = l.value;
+        
+        return (1 + length(t));
     }
 }
-
-export function max(x: number, y: number): number {
+function max(x: number, y: number): number {
     if (x > y) {
-        return x
+        return x;
     } else {
-        return y
+        return y;
     }
 }
-
-export function size<A, B>(t: Tree<A, B>): number {
-    switch (t.type) {
-        case 'Leaf': {
-            return 1
-        }
-        case 'LNode': {
-            const { left: l, right: r } = t
-            return max(size(l), size(r))
-        }
+function size<A, B>(t: Tree<A, B>): number {
+    if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
+        return 1;
+    } else if (t.kind === "LNode") {
+        const value: _, left: l, right: r = t.value;
+        
+        return max(size(l), size(r));
     }
 }
-const c = { type: 'Red' }
-const l: Tree<number, string> = { type: 'Leaf', value: 3 }
-const t = { type: 'LNode', value: "abc", left: { type: 'Leaf', value: 7 }, right: { type: 'Leaf', value: size(l) } }
+const c = { kind: "Red", value: {  } }
+const l: Tree<number, string> = { kind: "Leaf", value: { value: 3 } }
+const t = { kind: "LNode", value: { value: "abc", left: { kind: "Leaf", value: { value: 7 } }, right: { kind: "Leaf", value: { value: size(l) } } } }

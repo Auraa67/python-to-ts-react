@@ -1,331 +1,316 @@
-export type Comparaison = Eq | Lt | Gt
-
-export interface Eq {
-    type: 'Eq'
+import { Callable } from "./collections.abc";
+import { dataclass } from "./dataclasses";
+type Comparaison= Eq | Lt | Gt;
+interface Eq{
 }
-
-export interface Lt {
-    type: 'Lt'
+interface Lt{
 }
-
-export interface Gt {
-    type: 'Gt'
+interface Gt{
 }
-
-export type Tree<A> = Empty<A> | Node2<A>
-
-export interface Empty<A> {
-    type: 'Empty'
+type Tree<A> = Empty<A> | Node2<A>;
+interface Empty<A> {
 }
-
-export interface Node2<A> {
-    type: 'Node2'
-    height: number
-    left: Tree<A>
-    value: A
-    right: Tree<A>
+interface Node2<A> {
+    height: number;
+    left: Tree<A>;
+    value: A;
+    right: Tree<A>;
 }
-
-export function check(res: number): Comparaison {
+function check(res: number): Comparaison {
     if (res == 0) {
-        return { type: 'Eq' }
+        return { kind: "Eq", value: {  } };
     } else {
         if (res < 0) {
-            return { type: 'Lt' }
+            return { kind: "Lt", value: {  } };
         } else {
-            return { type: 'Gt' }
+            return { kind: "Gt", value: {  } };
         }
     }
 }
-
-export function max(i: number, j: number): number {
+function max(i: number, j: number): number {
     if (i > j) {
-        return i
+        return i;
     } else {
-        return j
+        return j;
     }
 }
-
-export function get_or_else<A>(v: A | undefined, other: A): A {
+function get_or_else<A>(v: A | undefined, other: A): A {
     if (v === undefined) {
-        return other
+        return other;
     } else {
-        return v
+        return v;
     }
 }
-
-export function is_empty<A>(t: Tree<A>): boolean {
-    switch (t.type) {
-        case 'Empty': {
-            return true
-        }
-        default: {
-            return false
-        }
+function is_empty<A>(t: Tree<A>): boolean {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return true;
+    } else if (t.kind === "_") {
+        const  = t.value;
+        
+        return false;
     }
 }
-
-export function mem<A>(x: A, t: Tree<A>, cmp: (_: A, __: A) => number): boolean {
-    switch (t.type) {
-        case 'Empty': {
-            return false
-        }
-        case 'Node2': {
-            const { left: l, value: k, right: r } = t
-            switch (check(cmp(x, k)).type) {
-                case 'Eq': {
-                    return true
-                }
-                case 'Lt': {
-                    return mem(x, l, cmp)
-                }
-                case 'Gt': {
-                    return mem(x, r, cmp)
-                }
-            }
-        }
-    }
-}
-
-export function find<A>(x: A, t: Tree<A>, cmp: (_: A, __: A) => number): A | undefined {
-    switch (t.type) {
-        case 'Empty': {
-            return undefined
-        }
-        case 'Node2': {
-            const { left: l, value: k, right: r } = t
-            switch (check(cmp(x, k)).type) {
-                case 'Eq': {
-                    return k
-                }
-                case 'Lt': {
-                    return find(x, l, cmp)
-                }
-                case 'Gt': {
-                    return find(x, r, cmp)
-                }
-            }
+function mem<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): boolean {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return false;
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: k, right: r = t.value;
+        
+        if (check(cmp(x, k)).kind === "Eq") {
+            const  = check(cmp(x, k)).value;
+            
+            return true;
+        } else if (check(cmp(x, k)).kind === "Lt") {
+            const  = check(cmp(x, k)).value;
+            
+            return mem(x, l, cmp);
+        } else if (check(cmp(x, k)).kind === "Gt") {
+            const  = check(cmp(x, k)).value;
+            
+            return mem(x, r, cmp);
         }
     }
 }
-
-export function min_elt<A>(t: Tree<A>): A | undefined {
-    switch (t.type) {
-        case 'Empty': {
-            return undefined
-        }
-        case 'Node2': {
-            const { left: l, value: x } = t
-            switch (l.type) {
-                case 'Empty': {
-                    return x
-                }
-                case 'Node2': {
-                    return min_elt(l)
-                }
-            }
-        }
-    }
-}
-
-export function max_elt<A>(t: Tree<A>): A | undefined {
-    switch (t.type) {
-        case 'Empty': {
-            return undefined
-        }
-        case 'Node2': {
-            const { value: x, right: r } = t
-            switch (r.type) {
-                case 'Empty': {
-                    return x
-                }
-                case 'Node2': {
-                    return max_elt(r)
-                }
-            }
+function find<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): A | undefined {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return undefined;
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: k, right: r = t.value;
+        
+        if (check(cmp(x, k)).kind === "Eq") {
+            const  = check(cmp(x, k)).value;
+            
+            return k;
+        } else if (check(cmp(x, k)).kind === "Lt") {
+            const  = check(cmp(x, k)).value;
+            
+            return find(x, l, cmp);
+        } else if (check(cmp(x, k)).kind === "Gt") {
+            const  = check(cmp(x, k)).value;
+            
+            return find(x, r, cmp);
         }
     }
 }
-
-export function height<A>(t: Tree<A>): number {
-    switch (t.type) {
-        case 'Empty': {
-            return 0
-        }
-        case 'Node2': {
-            const { height: h } = t
-            return h
-        }
-    }
-}
-
-export function size<A>(t: Tree<A>): number {
-    switch (t.type) {
-        case 'Empty': {
-            return 0
-        }
-        case 'Node2': {
-            const { left: l, right: r } = t
-            return (size(l) + size(r)) + 1
+function min_elt<A>(t: Tree<A>): A | undefined {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return undefined;
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: x, right: _ = t.value;
+        
+        if (l.kind === "Empty") {
+            const  = l.value;
+            
+            return x;
+        } else if (l.kind === "Node2") {
+            const height: _, left: _, value: _, right: _ = l.value;
+            
+            return min_elt(l);
         }
     }
 }
-
-export function create<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
+function max_elt<A>(t: Tree<A>): A | undefined {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return undefined;
+    } else if (t.kind === "Node2") {
+        const height: _, left: _, value: x, right: r = t.value;
+        
+        if (r.kind === "Empty") {
+            const  = r.value;
+            
+            return x;
+        } else if (r.kind === "Node2") {
+            const height: _, left: _, value: _, right: _ = r.value;
+            
+            return max_elt(r);
+        }
+    }
+}
+function height<A>(t: Tree<A>): number {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return 0;
+    } else if (t.kind === "Node2") {
+        const height: h, left: _, value: _, right: _ = t.value;
+        
+        return h;
+    }
+}
+function size<A>(t: Tree<A>): number {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return 0;
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: _, right: r = t.value;
+        
+        return ((size(l) + size(r)) + 1);
+    }
+}
+function create<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
     const hl: number = height(l)
     const hr: number = height(r)
-    return { type: 'Node2', height: max(hl, hr) + 1, left: l, value: x, right: r }
+    return { kind: "Node2", value: { height: (max(hl, hr) + 1), left: l, value: x, right: r } };
 }
-
-export function leaf<A>(x: A): Tree<A> {
-    return create({ type: 'Empty' }, x, { type: 'Empty' })
+function leaf<A>(x: A): Tree<A> {
+    return create({ kind: "Empty", value: {  } }, x, { kind: "Empty", value: {  } });
 }
-
-export function bal<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
+function bal<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
     const hl: number = height(l)
     const hr: number = height(r)
     if ((hr + 2) < hl) {
-        switch (l.type) {
-            case 'Empty': {
-                throw new Error()
-            }
-            case 'Node2': {
-                const { left: ll, value: lx, right: lr } = l
-                if (!(height(lr) > height(ll))) {
-                    const rs = create(lr, x, r)
-                    return create(ll, lx, rs)
-                } else {
-                    switch (lr.type) {
-                        case 'Empty': {
-                            throw new Error()
-                        }
-                        case 'Node2': {
-                            const { left: lrl, value: lrx, right: lrr } = lr
-                            const ls = create(ll, lx, lrl)
-                            const rs = create(lrr, x, r)
-                            return create(ls, lrx, rs)
-                        }
-                    }
+        if (l.kind === "Empty") {
+            const  = l.value;
+            
+            throw new SystemExit();
+        } else if (l.kind === "Node2") {
+            const height: _, left: ll, value: lx, right: lr = l.value;
+            
+            if (!(height(lr) > height(ll))) {
+                const rs = create(lr, x, r)
+                return create(ll, lx, rs);
+            } else {
+                if (lr.kind === "Empty") {
+                    const  = lr.value;
+                    
+                    throw new SystemExit();
+                } else if (lr.kind === "Node2") {
+                    const height: _, left: lrl, value: lrx, right: lrr = lr.value;
+                    
+                    const ls = create(ll, lx, lrl)
+                    const rs = create(lrr, x, r)
+                    return create(ls, lrx, rs);
                 }
             }
         }
     } else {
         if ((hl + 2) < hr) {
-            switch (r.type) {
-                case 'Empty': {
-                    throw new Error()
-                }
-                case 'Node2': {
-                    const { left: rl, value: rx, right: rr } = r
-                    if (!(height(rl) > height(rr))) {
-                        const ls = create(l, x, rl)
-                        return create(ls, rx, rr)
-                    } else {
-                        switch (rl.type) {
-                            case 'Empty': {
-                                throw new Error()
-                            }
-                            case 'Node2': {
-                                const { left: rll, value: rlx, right: rlr } = rl
-                                const ls = create(l, x, rll)
-                                const rs = create(rlr, rx, rr)
-                                return create(ls, rlx, rs)
-                            }
-                        }
+            if (r.kind === "Empty") {
+                const  = r.value;
+                
+                throw new SystemExit();
+            } else if (r.kind === "Node2") {
+                const height: _, left: rl, value: rx, right: rr = r.value;
+                
+                if (!(height(rl) > height(rr))) {
+                    const ls = create(l, x, rl)
+                    return create(ls, rx, rr);
+                } else {
+                    if (rl.kind === "Empty") {
+                        const  = rl.value;
+                        
+                        throw new SystemExit();
+                    } else if (rl.kind === "Node2") {
+                        const height: _, left: rll, value: rlx, right: rlr = rl.value;
+                        
+                        const ls = create(l, x, rll)
+                        const rs = create(rlr, rx, rr)
+                        return create(ls, rlx, rs);
                     }
                 }
             }
         } else {
-            return create(l, x, r)
+            return create(l, x, r);
         }
     }
 }
-
-export function add<A>(x: A, t: Tree<A>, cmp: (_: A, __: A) => number): Tree<A> {
-    switch (t.type) {
-        case 'Empty': {
-            return leaf(x)
-        }
-        case 'Node2': {
-            const { left: l, value: y, right: r } = t
-            switch (check(cmp(x, y)).type) {
-                case 'Eq': {
-                    return create(l, y, r)
-                }
-                case 'Lt': {
-                    return bal(add(x, l, cmp), y, r)
-                }
-                case 'Gt': {
-                    return bal(l, y, add(x, r, cmp))
-                }
-            }
-        }
-    }
-}
-
-export function remove_min<A>(l: Tree<A>, x: A, r: Tree<A>): [Tree<A>, A] {
-    switch (l.type) {
-        case 'Empty': {
-            return [r, x]
-        }
-        case 'Node2': {
-            const { left: ll, value: lx, right: lr } = l
-            const [l2, m] = remove_min(ll, lx, lr)
-            return [bal(l2, x, r), m]
+function add<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): Tree<A> {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return leaf(x);
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: y, right: r = t.value;
+        
+        if (check(cmp(x, y)).kind === "Eq") {
+            const  = check(cmp(x, y)).value;
+            
+            return create(l, y, r);
+        } else if (check(cmp(x, y)).kind === "Lt") {
+            const  = check(cmp(x, y)).value;
+            
+            return bal(add(x, l, cmp), y, r);
+        } else if (check(cmp(x, y)).kind === "Gt") {
+            const  = check(cmp(x, y)).value;
+            
+            return bal(l, y, add(x, r, cmp));
         }
     }
 }
-
-export function merge<A>(s1: Tree<A>, s2: Tree<A>): Tree<A> {
-    switch (s1.type) {
-        case 'Empty': {
-            return s2
-        }
-        case 'Node2': {
-            switch (s2.type) {
-                case 'Empty': {
-                    return s1
-                }
-                case 'Node2': {
-                    const { left: l2, value: x2, right: r2 } = s2
-                    const [s3, m] = remove_min(l2, x2, r2)
-                    return bal(s1, m, s3)
-                }
-            }
+function remove_min<A>(l: Tree<A>, x: A, r: Tree<A>): [Tree<A>, A] {
+    if (l.kind === "Empty") {
+        const  = l.value;
+        
+        return [r, x];
+    } else if (l.kind === "Node2") {
+        const height: _, left: ll, value: lx, right: lr = l.value;
+        
+        let l2=remove_min(ll, lx, lr), m=remove_min(ll, lx, lr);
+        return [bal(l2, x, r), m];
+    }
+}
+function merge<A>(s1: Tree<A>, s2: Tree<A>): Tree<A> {
+    if (s1.kind === "Empty") {
+        const  = s1.value;
+        
+        return s2;
+    } else if (s1.kind === "Node2") {
+        const height: _, left: _, value: _, right: _ = s1.value;
+        
+        if (s2.kind === "Empty") {
+            const  = s2.value;
+            
+            return s1;
+        } else if (s2.kind === "Node2") {
+            const height: _, left: l2, value: x2, right: r2 = s2.value;
+            
+            let s3=remove_min(l2, x2, r2), m=remove_min(l2, x2, r2);
+            return bal(s1, m, s3);
         }
     }
 }
-
-export function remove<A>(x: A, t: Tree<A>, cmp: (_: A, __: A) => number): Tree<A> {
-    switch (t.type) {
-        case 'Empty': {
-            return { type: 'Empty' }
-        }
-        case 'Node2': {
-            const { left: l, value: y, right: r } = t
-            switch (check(cmp(x, y)).type) {
-                case 'Eq': {
-                    return merge(l, r)
-                }
-                case 'Lt': {
-                    return bal(remove(x, l, cmp), y, r)
-                }
-                case 'Gt': {
-                    return bal(l, y, remove(x, r, cmp))
-                }
-            }
+function remove<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): Tree<A> {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return { kind: "Empty", value: {  } };
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: y, right: r = t.value;
+        
+        if (check(cmp(x, y)).kind === "Eq") {
+            const  = check(cmp(x, y)).value;
+            
+            return merge(l, r);
+        } else if (check(cmp(x, y)).kind === "Lt") {
+            const  = check(cmp(x, y)).value;
+            
+            return bal(remove(x, l, cmp), y, r);
+        } else if (check(cmp(x, y)).kind === "Gt") {
+            const  = check(cmp(x, y)).value;
+            
+            return bal(l, y, remove(x, r, cmp));
         }
     }
 }
-
-export function toList<A>(t: Tree<A>): A[] {
-    switch (t.type) {
-        case 'Empty': {
-            return []
-        }
-        case 'Node2': {
-            const { left: l, value: y, right: r } = t
-            return [...toList(l), y, ...toList(r)]
-        }
+function toList<A>(t: Tree<A>): A[] {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return [];
+    } else if (t.kind === "Node2") {
+        const height: _, left: l, value: y, right: r = t.value;
+        
+        return [...toList(l), y, ...toList(r)];
     }
 }

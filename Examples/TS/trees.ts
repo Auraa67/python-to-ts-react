@@ -1,42 +1,35 @@
-export type Tree<A, B> = Leaf<A> | LNode<A, B>
-
-export interface Leaf<A> {
-    type: 'Leaf'
-    value: A
+import { dataclass } from "./dataclasses";
+type Tree<A, B> = Leaf<A> | LNode<A, B>;
+interface Leaf<A> {
+    value: A;
 }
-
-export interface LNode<A, B> {
-    type: 'LNode'
-    value: B
-    left: Tree<A, B>
-    right: Tree<A, B>
+interface LNode<A, B> {
+    value: B;
+    left: Tree<A, B>;
+    right: Tree<A, B>;
 }
-
-export function mkLeaf<A>(value: A): Leaf<A> {
-    return { type: 'Leaf', value: value }
+function mkLeaf<A>(value: A): Leaf<A> {
+    return { kind: "Leaf", value: { value: value } };
 }
-
-export function mkLNode<A, B>(value: B, left: Tree<A, B>, right: Tree<A, B>): LNode<A, B> {
-    return { type: 'LNode', value: value, left: left, right: right }
+function mkLNode<A, B>(value: B, left: Tree<A, B>, right: Tree<A, B>): LNode<A, B> {
+    return { kind: "LNode", value: { value: value, left: left, right: right } };
 }
-
-export function max(x: number, y: number): number {
+function max(x: number, y: number): number {
     if (x > y) {
-        return x
+        return x;
     } else {
-        return y
+        return y;
     }
 }
-
-export function size(t: Tree<number, string>): number {
-    switch (t.type) {
-        case 'Leaf': {
-            return 1
-        }
-        case 'LNode': {
-            const { left: l, right: r } = t
-            return 1 + max(size(l), size(r))
-        }
+function size(t: Tree<number, string>): number {
+    if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
+        return 1;
+    } else if (t.kind === "LNode") {
+        const value: _, left: l, right: r = t.value;
+        
+        return (1 + max(size(l), size(r)));
     }
 }
 const t: Tree<number, string> = mkLNode("ok", mkLeaf(3), mkLeaf(5))

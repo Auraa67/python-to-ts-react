@@ -1,10 +1,10 @@
 function valeur_abs(x: number): number {
     if (x < 0) {
-        return x
+        return x;
     } else {
-        return 0 - x
+        return (0 - x);
     }
 }
 const r = valeur_abs(-5)
 
-console.log(r)
+print(r)

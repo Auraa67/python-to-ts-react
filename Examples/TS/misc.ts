@@ -1,90 +1,81 @@
-export type Tree<A> = Empty<A> | LNode<A>
-
-export interface Empty<A> {
-    type: 'Empty'
+import { dataclass } from "./dataclasses";
+import { Callable } from "./collections.abc";
+type Tree<A> = Empty<A> | LNode<A>;
+interface Empty<A> {
 }
-
-export interface LNode<A> {
-    type: 'LNode'
-    left: Tree<A>
-    right: Tree<A>
+interface LNode<A> {
+    left: Tree<A>;
+    right: Tree<A>;
 }
-
-export type int_Tree = Tree<number>
-
-export type int_list = number[]
-
-export type int_bool_tuple = [number, boolean]
-
-export type nothing = undefined
-
-export type call = (_: number, __: boolean) => string
+type int_Tree= Tree<number>;
+type int_list= number[];
+type int_bool_tuple= [number, boolean];
+type nothing= undefined;
+type call= (arg0: number, arg1: boolean) => string;
 const x = 3
 const y: number = 9
-const [a, b] = [(x + (y * 7)) - 10, 9]
+let a=[((x + (y * 7)) - 10), 9], b=[((x + (y * 7)) - 10), 9];
 const d = [1, 2, 3, 4]
 const e = [1, 2, 3, 4]
 const c = [...e]
-const em: Tree<number> = { type: 'Empty' }
-const no: Tree<number> = { type: 'LNode', left: { type: 'Empty' }, right: { type: 'Empty' } }
-
-export function f(x: number): string {
-    return x.toString()
+const em: Tree<number> = { kind: "Empty", value: {  } }
+const no: Tree<number> = { kind: "LNode", value: { left: { kind: "Empty", value: {  } }, right: { kind: "Empty", value: {  } } } }
+function f(x: number): string {
+    return str(x);
 }
-
-export function size<A>(t: Tree<A>): number {
-    switch (t.type) {
-        case 'Empty': {
-            return 0
-        }
-        case 'LNode': {
-            const { right: r } = t
-            return 1
-        }
+function size<A>(t: Tree<A>): number {
+    if (t.kind === "Empty") {
+        const  = t.value;
+        
+        return 0;
+    } else if (t.kind === "LNode") {
+        const left: _, right: r = t.value;
+        
+        return 1;
     }
 }
-
-export function head(l: number[]): number {
-    if (l.length > 0) {
-        const [h, ...t] = l
-        return h
+function head(l: number[]): number {
+    if (l.length === 0) {
+        return 0;
     } else {
-        return 0
+        const h= l[0];
+        const t= l.slice(1);
+        return h;
     }
 }
-
-export function times(x: number, y: number): number {
+function times(x: number, y: number): number {
     if (x == 0) {
-        return 0
+        return 0;
     } else {
-        return x * y
+        return (x * y);
     }
 }
-
-export function handle(x: number, y: string): string {
+function handle(x: number, y: string): string {
     try {
-        throw new RangeError()
+        throw new IndexError();
     } catch (err) {
-        if (err instanceof Error) {
-            return y
+        if (err instanceof Exception) {
+            return y;
+        } else {
+            throw err;
         }
-        throw err
     }
 }
-
-export function is_empty<A>(l: A[]): boolean {
-    if (l.length > 0) {
-        return true
+function is_empty<A>(l: A[]): boolean {
+    if (l.length === 0) {
+        return false;
     } else {
-        return false
+        const _= l[0];
+        const _= l.slice(1);
+        return true;
     }
 }
-
-export function concat<A>(l1: A[], l2: A[]): A[] {
-    if (l1.length > 0) {
-        const [h1, ...t1] = l1
-        return [h1, ...concat(t1, l2)]
+function concat<A>(l1: A[], l2: A[]): A[] {
+    if (l1.length === 0) {
+        return l2;
     } else {
-        return l2
+        const h1= l1[0];
+        const t1= l1.slice(1);
+        return [h1, ...concat(t1, l2)];
     }
 }

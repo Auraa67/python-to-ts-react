@@ -16,4 +16,4 @@ clean:
 .py.ts:
 	python3 ../main.py --pretty $*.py > PY/$*.py
 	python3 ../main.py --check $*.py PY/$*.py
-# 	python3 ../main.py $*.py > TS/$*.ts
+	python3 ../main.py $*.py > TS/$*.ts

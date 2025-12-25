@@ -1,65 +1,56 @@
-export interface Task {
-    type: 'Task'
-    id: number
-    text: string
-    done: boolean
+import { dataclass } from "./dataclasses";
+import { Callable } from "./collections.abc";
+interface Task{
+    id: number;
+    text: string;
+    done: boolean;
 }
-
-export type State = Task[]
-
-export type Action = Added | Changed | Deleted
-
-export interface Added {
-    type: 'Added'
-    id: number
-    text: string
+type State= Task[];
+type Action= Added | Changed | Deleted;
+interface Added{
+    id: number;
+    text: string;
 }
-
-export interface Changed {
-    type: 'Changed'
-    task: Task
+interface Changed{
+    task: Task;
 }
-
-export interface Deleted {
-    type: 'Deleted'
-    id: number
+interface Deleted{
+    id: number;
 }
-
-export function map<A, B>(f: (_: A) => B, l: A[]): B[] {
-    if (l.length > 0) {
-        const [h, ...t] = l
-        return [f(h), ...map(f, t)]
+function map<A, B>(f: (arg0: A) => B, l: A[]): B[] {
+    if (l.length === 0) {
+        return [];
     } else {
-        return []
+        const h= l[0];
+        const t= l.slice(1);
+        return [f(h), ...map(f, t)];
     }
 }
-
-export function filter<A>(f: (_: A) => boolean, l: A[]): A[] {
-    if (l.length > 0) {
-        const [h, ...t] = l
+function filter<A>(f: (arg0: A) => boolean, l: A[]): A[] {
+    if (l.length === 0) {
+        return [];
+    } else {
+        const h= l[0];
+        const t= l.slice(1);
         if (f(h)) {
-            return [h, ...filter(f, t)]
+            return [h, ...filter(f, t)];
         } else {
-            return filter(f, t)
+            return filter(f, t);
         }
-    } else {
-        return []
     }
 }
-
-export function tasksReducer(tasks: State, action: Action): State {
-    switch (action.type) {
-        case 'Added': {
-            const { id: id, text: text } = action
-            return [...tasks, { type: 'Task', id: id, text: text, done: false }]
-        }
-        case 'Changed': {
-            const { task: task } = action
-            return map(t => ((t.id == task.id) ? task : t), tasks)
-        }
-        case 'Deleted': {
-            const { id: id } = action
-            return filter(t => (!(t.id == id)), tasks)
-        }
+function tasksReducer(tasks: State, action: Action): State {
+    if (action.kind === "Added") {
+        const id: id, text: text = action.value;
+        
+        return [...tasks, { kind: "Task", value: { id: id, text: text, done: false } }];
+    } else if (action.kind === "Changed") {
+        const task: task = action.value;
+        
+        return map(((t) => ((t.id == task.id) ? task : t)), tasks);
+    } else if (action.kind === "Deleted") {
+        const id: id = action.value;
+        
+        return filter(((t) => (!(t.id == id))), tasks);
     }
 }

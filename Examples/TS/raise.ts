@@ -1,16 +1,16 @@
 function f(): string {
-    throw new TypeError("error message")
+    throw new TypeError("error message");
 }
-
 function main(): string {
     try {
-        return f()
+        return f();
     } catch (err) {
         if (err instanceof TypeError) {
-            return "Type error: " + err.toString()
+            return ("Type error: " + str(err));
+        } else {
+            throw err;
         }
-        throw err
     }
 }
 
-console.log(main())
+print(main())

@@ -1,66 +1,58 @@
-type Tree<A, B> = Leaf<A, B> | LNode<A, B>
-
+import { Callable } from "./collections.abc";
+import { dataclass } from "./dataclasses";
+type Tree<A, B> = Leaf<A, B> | LNode<A, B>;
 interface Leaf<A, B> {
-    type: 'Leaf'
-    value: A
+    value: A;
 }
-
 interface LNode<A, B> {
-    type: 'LNode'
-    value: B
-    left: Tree<A, B>
-    right: Tree<A, B>
+    value: B;
+    left: Tree<A, B>;
+    right: Tree<A, B>;
 }
-
 function max(x: number, y: number): number {
     if (x > y) {
-        return x
+        return x;
     } else {
-        return y
+        return y;
     }
 }
-
 function first<A, B>(z: [A, B]): A {
-    const [x, ] = z
-    return x
+    let x=z, _=z;
+    return x;
 }
-
 function size(t: Tree<number, string>): number {
-    switch (t.type) {
-        case 'Leaf': {
-            return 1
-        }
-        case 'LNode': {
-            const { left: l, right: r } = t
-            return 1 + max(size(l), size(r))
-        }
+    if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
+        return 1;
+    } else if (t.kind === "LNode") {
+        const value: _, left: l, right: r = t.value;
+        
+        return (1 + max(size(l), size(r)));
     }
 }
-
 function simple(t: Tree<number, string>): boolean {
-    switch (t.type) {
-        case 'Leaf': {
-            return true
-        }
-        default: {
-            return false
-        }
+    if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
+        return true;
+    } else if (t.kind === "_") {
+        const  = t.value;
+        
+        return false;
     }
 }
-
-function compose<A, B, C>(f: (_: A) => B, g: (_: B) => C): (_: A) => C {
-    return x => g(f(x))
+function compose<A, B, C>(f: (arg0: A) => B, g: (arg0: B) => C): (arg0: A) => C {
+    return ((x) => g(f(x)));
 }
-
 function succ(x: number): number {
-    return x + 1
+    return (x + 1);
 }
-
 function string_of_int(x: number): string {
-    return x.toString()
+    return str(x);
 }
 const f = compose(succ, string_of_int)
-const l: Tree<number, string> = { type: 'Leaf', value: 2 }
-const t: Tree<number, string> = { type: 'LNode', value: "ok", left: { type: 'Leaf', value: 3 }, right: { type: 'Leaf', value: 5 } }
+const l: Tree<number, string> = { kind: "Leaf", value: { value: 2 } }
+const t: Tree<number, string> = { kind: "LNode", value: { value: "ok", left: { kind: "Leaf", value: { value: 3 } }, right: { kind: "Leaf", value: { value: 5 } } } }
 
-console.log(size(t))
+print(size(t))

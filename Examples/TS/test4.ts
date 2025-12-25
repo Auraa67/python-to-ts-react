@@ -1,10 +1,12 @@
 function empty<A>(l: A[]): boolean {
-    if (l.length > 0) {
-        return false
+    if (l.length === 0) {
+        return true;
     } else {
-        return true
+        const _= l[0];
+        const _= l.slice(1);
+        return false;
     }
 }
 const l = [1, ...[2, ...[3, ...[]]]]
 
-console.log(empty(l))
+print(empty(l))

@@ -1,10 +1,8 @@
-import { type Tree, type LNode, type Leaf } from './trees.ts'
-import * as trees from './trees.ts'
-
-const t: Tree<number, string> = { type: 'LNode', value: "ok", left: { type: 'Leaf', value: 3 }, right: { type: 'Leaf', value: 5 } }
-
+import { Tree, LNode, Leaf } from "./trees";
+import * as trees from "./trees";
+const t: Tree<number, string> = { kind: "LNode", value: { value: "ok", left: { kind: "Leaf", value: { value: 3 } }, right: { kind: "Leaf", value: { value: 5 } } } }
 function size2(t: Tree<number, string>): number {
-    return trees.size(t)
+    return trees.size(t);
 }
 
-console.log(size2(t))
+print(size2(t))

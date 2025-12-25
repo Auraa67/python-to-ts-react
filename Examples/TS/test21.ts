@@ -1,13 +1,12 @@
-interface Point {
-    type: 'Point'
-    x: number
-    y: number
+import { dataclass, replace } from "./dataclasses";
+interface Point{
+    x: number;
+    y: number;
 }
-const pt: Point = { type: 'Point', x: 3, y: 5 }
-
+const pt: Point = { kind: "Point", value: { x: 3, y: 5 } }
 function init(z: number): Point {
-    return { type: 'Point', x: z, y: z }
+    return { kind: "Point", value: { x: z, y: z } };
 }
-const pt2: Point = { ...pt, y: 10 }
+const pt2: Point = {...pt, y: 10}
 
-console.log(pt2)
+print(pt2)

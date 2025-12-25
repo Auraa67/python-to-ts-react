@@ -1,8 +1,10 @@
-export function fold_left<A, B>(f: (_: A, __: B) => A, init: A, l: B[]): A {
-    if (l.length > 0) {
-        const [h, ...t] = l
-        return fold_left(f, f(init, h), t)
+import { Callable } from "./collections.abc";
+function fold_left<A, B>(f: (arg0: A, arg1: B) => A, init: A, l: B[]): A {
+    if (l.length === 0) {
+        return init;
     } else {
-        return init
+        const h= l[0];
+        const t= l.slice(1);
+        return fold_left(f, f(init, h), t);
     }
 }
