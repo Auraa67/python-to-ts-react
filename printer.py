@@ -223,7 +223,9 @@ def str_of_decl(depth: int, d: decl) -> str:
             lists = f"<{", ".join(tps)}> " if tps else ""
             field = "".join(map(lambda x: newline(depth + 1) + x[0] + ": " + str_of_typ(x[1]) + ";", fields))
             return (newline(depth) + "interface " + id + lists + "{" + field + newline(depth) + "}")
-        # TODO Add missing cases
+        case TypeAlias(id=id, tps=tps, ty=ty):
+            lists = f"<{", ".join(tps)}> " if tps else ""
+            return (newline(depth) + "type " + id + lists + "= " + str_of_typ(ty) + ";")
         case DeclRegion(contents=d1, reg=r):
             try:
                 return str_of_decl(depth, d1)
