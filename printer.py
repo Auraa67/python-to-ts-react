@@ -212,6 +212,10 @@ def str_of_decl(depth: int, d: decl) -> str:
             return (newline(depth) + "import { " + ", ".join(names) + " } from \"./" + module + "\";")
         case InitVars(ids=ids, value=value):
             return  (newline(depth) + "let " + ", ".join(map(lambda x: x + "=" + str_of_exp(value), ids)) + ";")
+        case FunDef(id=id, tps=tps, args=args, ret=ret, body=body):
+            lists = "<" + ", ".join(tps) + ">" if tps else ""
+            arguments = ", ".join(map(lambda x: x[0] + ": " + str_of_typ(x[1]), args))
+            return (newline(depth) + "function " + id + lists + "(" + arguments + "): " + str_of_typ(ret) + " {" + str_of_block(depth + 1, body) + newline(depth) + "}")
         # TODO Add missing cases
         case DeclRegion(contents=d1, reg=r):
             try:
