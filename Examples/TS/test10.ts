@@ -1,4 +1,3 @@
-import { Callable } from "./collections.abc";
 function fold_left<A, B>(f: (arg0: A, arg1: B) => A, init: A, l: B[]): A {
     if (l.length === 0) {
         return init;

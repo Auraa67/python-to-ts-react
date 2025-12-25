@@ -14,4 +14,4 @@ function update<A>(l: A[], index: number, elt: A): A[] {
 }
 const l = [1, 2, 3, 4, 5]
 
-print(insert(l, 3, 9))
+console.log(insert(l, 3, 9))

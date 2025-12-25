@@ -1,4 +1,4 @@
 function string_of_int(i: number): string {
-    return str(i);
+    return i.toString();
 }
 const x = 1

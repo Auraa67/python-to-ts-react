@@ -11,4 +11,4 @@ const x = [5, 4]
 const y = [8, 9, 10]
 const r = concat(x, y)
 
-print(r)
+console.log(r)

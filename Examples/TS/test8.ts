@@ -1,4 +1,3 @@
-import { Callable } from "./collections.abc";
 function map<A, B>(f: (arg0: A) => B, l: A[]): B[] {
     function map2(acc: B[], l: A[]): B[] {
         if (l.length === 0) {

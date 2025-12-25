@@ -1,4 +1,3 @@
-import { dataclass } from "./dataclasses";
 type MyList<A> = Nil<A> | Cons<A>;
 interface Nil<A> {
 }
@@ -8,23 +7,17 @@ interface Cons<A> {
 }
 function length<A>(l: MyList<A>): number {
     if (l.kind === "Nil") {
-        const  = l.value;
-        
         return 0;
     } else if (l.kind === "Cons") {
-        const hd: _, tl: t = l.value;
-        
+        const { tl: t } = l.value;
         return (1 + length(t));
     }
 }
 function to_list<A>(l: MyList<A>): A[] {
     if (l.kind === "Nil") {
-        const  = l.value;
-        
         return [];
     } else if (l.kind === "Cons") {
-        const hd: h, tl: t = l.value;
-        
+        const { hd: h, tl: t } = l.value;
         return [h, ...to_list(t)];
     }
 }
@@ -40,4 +33,4 @@ function from_list<A>(l: A[]): MyList<A> {
 const l = from_list(["a", "b", "c", "d", "e"])
 const r = to_list(l)
 
-print(r)
+console.log(r)

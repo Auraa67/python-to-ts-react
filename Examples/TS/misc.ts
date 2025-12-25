@@ -1,5 +1,3 @@
-import { dataclass } from "./dataclasses";
-import { Callable } from "./collections.abc";
 type Tree<A> = Empty<A> | LNode<A>;
 interface Empty<A> {
 }
@@ -14,23 +12,20 @@ type nothing= undefined;
 type call= (arg0: number, arg1: boolean) => string;
 const x = 3
 const y: number = 9
-let a=[((x + (y * 7)) - 10), 9], b=[((x + (y * 7)) - 10), 9];
+let [a, b] = [((x + (y * 7)) - 10), 9];
 const d = [1, 2, 3, 4]
 const e = [1, 2, 3, 4]
 const c = [...e]
 const em: Tree<number> = { kind: "Empty", value: {  } }
 const no: Tree<number> = { kind: "LNode", value: { left: { kind: "Empty", value: {  } }, right: { kind: "Empty", value: {  } } } }
 function f(x: number): string {
-    return str(x);
+    return x.toString();
 }
 function size<A>(t: Tree<A>): number {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return 0;
     } else if (t.kind === "LNode") {
-        const left: _, right: r = t.value;
-        
+        const { right: r } = t.value;
         return 1;
     }
 }
@@ -54,7 +49,7 @@ function handle(x: number, y: string): string {
     try {
         throw new IndexError();
     } catch (err) {
-        if (err instanceof Exception) {
+        if (err instanceof Error) {
             return y;
         } else {
             throw err;
@@ -65,8 +60,6 @@ function is_empty<A>(l: A[]): boolean {
     if (l.length === 0) {
         return false;
     } else {
-        const _= l[0];
-        const _= l.slice(1);
         return true;
     }
 }

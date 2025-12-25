@@ -7,4 +7,4 @@ function valeur_abs(x: number): number {
 }
 const r = valeur_abs(-5)
 
-print(r)
+console.log(r)

@@ -1,4 +1,3 @@
-import { dataclass } from "./dataclasses";
 type MyList<A> = MyNil<A> | MyCons<A>;
 interface MyNil<A> {
 }
@@ -24,27 +23,18 @@ interface LNode<A, C> {
 }
 function toInt(c: Colour): number {
     if (c.kind === "Red") {
-        const  = c.value;
-        
         return 0;
     } else if (c.kind === "Black") {
-        const  = c.value;
-        
         return 1;
     } else if (c.kind === "White") {
-        const  = c.value;
-        
         return 2;
     }
 }
 function length<A>(l: MyList<A>): number {
     if (l.kind === "MyNil") {
-        const  = l.value;
-        
         return 0;
     } else if (l.kind === "MyCons") {
-        const hd: _, tl: t = l.value;
-        
+        const { tl: t } = l.value;
         return (1 + length(t));
     }
 }
@@ -57,12 +47,9 @@ function max(x: number, y: number): number {
 }
 function size<A, B>(t: Tree<A, B>): number {
     if (t.kind === "Leaf") {
-        const value: _ = t.value;
-        
         return 1;
     } else if (t.kind === "LNode") {
-        const value: _, left: l, right: r = t.value;
-        
+        const { left: l, right: r } = t.value;
         return max(size(l), size(r));
     }
 }

@@ -5,4 +5,4 @@ function size2(t: Tree<number, string>): number {
     return trees.size(t);
 }
 
-print(size2(t))
+console.log(size2(t))

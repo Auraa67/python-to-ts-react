@@ -2,7 +2,6 @@ function size<A>(l: A[]): number {
     if (l.length === 0) {
         return 0;
     } else {
-        const _= l[0];
         const t= l.slice(1);
         return (1 + size(t));
     }

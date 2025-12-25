@@ -1,5 +1,3 @@
-import { Callable } from "./collections.abc";
-import { dataclass } from "./dataclasses";
 type Comparaison= Eq | Lt | Gt;
 interface Eq{
 }
@@ -43,118 +41,76 @@ function get_or_else<A>(v: A | undefined, other: A): A {
 }
 function is_empty<A>(t: Tree<A>): boolean {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return true;
     } else if (t.kind === "_") {
-        const  = t.value;
-        
         return false;
     }
 }
 function mem<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): boolean {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return false;
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: k, right: r = t.value;
-        
+        const { left: l, value: k, right: r } = t.value;
         if (check(cmp(x, k)).kind === "Eq") {
-            const  = check(cmp(x, k)).value;
-            
             return true;
         } else if (check(cmp(x, k)).kind === "Lt") {
-            const  = check(cmp(x, k)).value;
-            
             return mem(x, l, cmp);
         } else if (check(cmp(x, k)).kind === "Gt") {
-            const  = check(cmp(x, k)).value;
-            
             return mem(x, r, cmp);
         }
     }
 }
 function find<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): A | undefined {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return undefined;
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: k, right: r = t.value;
-        
+        const { left: l, value: k, right: r } = t.value;
         if (check(cmp(x, k)).kind === "Eq") {
-            const  = check(cmp(x, k)).value;
-            
             return k;
         } else if (check(cmp(x, k)).kind === "Lt") {
-            const  = check(cmp(x, k)).value;
-            
             return find(x, l, cmp);
         } else if (check(cmp(x, k)).kind === "Gt") {
-            const  = check(cmp(x, k)).value;
-            
             return find(x, r, cmp);
         }
     }
 }
 function min_elt<A>(t: Tree<A>): A | undefined {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return undefined;
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: x, right: _ = t.value;
-        
+        const { left: l, value: x } = t.value;
         if (l.kind === "Empty") {
-            const  = l.value;
-            
             return x;
         } else if (l.kind === "Node2") {
-            const height: _, left: _, value: _, right: _ = l.value;
-            
             return min_elt(l);
         }
     }
 }
 function max_elt<A>(t: Tree<A>): A | undefined {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return undefined;
     } else if (t.kind === "Node2") {
-        const height: _, left: _, value: x, right: r = t.value;
-        
+        const { value: x, right: r } = t.value;
         if (r.kind === "Empty") {
-            const  = r.value;
-            
             return x;
         } else if (r.kind === "Node2") {
-            const height: _, left: _, value: _, right: _ = r.value;
-            
             return max_elt(r);
         }
     }
 }
 function height<A>(t: Tree<A>): number {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return 0;
     } else if (t.kind === "Node2") {
-        const height: h, left: _, value: _, right: _ = t.value;
-        
+        const { height: h } = t.value;
         return h;
     }
 }
 function size<A>(t: Tree<A>): number {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return 0;
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: _, right: r = t.value;
-        
+        const { left: l, right: r } = t.value;
         return ((size(l) + size(r)) + 1);
     }
 }
@@ -171,23 +127,17 @@ function bal<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
     const hr: number = height(r)
     if ((hr + 2) < hl) {
         if (l.kind === "Empty") {
-            const  = l.value;
-            
             throw new SystemExit();
         } else if (l.kind === "Node2") {
-            const height: _, left: ll, value: lx, right: lr = l.value;
-            
+            const { left: ll, value: lx, right: lr } = l.value;
             if (!(height(lr) > height(ll))) {
                 const rs = create(lr, x, r)
                 return create(ll, lx, rs);
             } else {
                 if (lr.kind === "Empty") {
-                    const  = lr.value;
-                    
                     throw new SystemExit();
                 } else if (lr.kind === "Node2") {
-                    const height: _, left: lrl, value: lrx, right: lrr = lr.value;
-                    
+                    const { left: lrl, value: lrx, right: lrr } = lr.value;
                     const ls = create(ll, lx, lrl)
                     const rs = create(lrr, x, r)
                     return create(ls, lrx, rs);
@@ -197,23 +147,17 @@ function bal<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
     } else {
         if ((hl + 2) < hr) {
             if (r.kind === "Empty") {
-                const  = r.value;
-                
                 throw new SystemExit();
             } else if (r.kind === "Node2") {
-                const height: _, left: rl, value: rx, right: rr = r.value;
-                
+                const { left: rl, value: rx, right: rr } = r.value;
                 if (!(height(rl) > height(rr))) {
                     const ls = create(l, x, rl)
                     return create(ls, rx, rr);
                 } else {
                     if (rl.kind === "Empty") {
-                        const  = rl.value;
-                        
                         throw new SystemExit();
                     } else if (rl.kind === "Node2") {
-                        const height: _, left: rll, value: rlx, right: rlr = rl.value;
-                        
+                        const { left: rll, value: rlx, right: rlr } = rl.value;
                         const ls = create(l, x, rll)
                         const rs = create(rlr, rx, rr)
                         return create(ls, rlx, rs);
@@ -227,90 +171,59 @@ function bal<A>(l: Tree<A>, x: A, r: Tree<A>): Tree<A> {
 }
 function add<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): Tree<A> {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return leaf(x);
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: y, right: r = t.value;
-        
+        const { left: l, value: y, right: r } = t.value;
         if (check(cmp(x, y)).kind === "Eq") {
-            const  = check(cmp(x, y)).value;
-            
             return create(l, y, r);
         } else if (check(cmp(x, y)).kind === "Lt") {
-            const  = check(cmp(x, y)).value;
-            
             return bal(add(x, l, cmp), y, r);
         } else if (check(cmp(x, y)).kind === "Gt") {
-            const  = check(cmp(x, y)).value;
-            
             return bal(l, y, add(x, r, cmp));
         }
     }
 }
 function remove_min<A>(l: Tree<A>, x: A, r: Tree<A>): [Tree<A>, A] {
     if (l.kind === "Empty") {
-        const  = l.value;
-        
         return [r, x];
     } else if (l.kind === "Node2") {
-        const height: _, left: ll, value: lx, right: lr = l.value;
-        
-        let l2=remove_min(ll, lx, lr), m=remove_min(ll, lx, lr);
+        const { left: ll, value: lx, right: lr } = l.value;
+        let [l2, m] = remove_min(ll, lx, lr);
         return [bal(l2, x, r), m];
     }
 }
 function merge<A>(s1: Tree<A>, s2: Tree<A>): Tree<A> {
     if (s1.kind === "Empty") {
-        const  = s1.value;
-        
         return s2;
     } else if (s1.kind === "Node2") {
-        const height: _, left: _, value: _, right: _ = s1.value;
-        
         if (s2.kind === "Empty") {
-            const  = s2.value;
-            
             return s1;
         } else if (s2.kind === "Node2") {
-            const height: _, left: l2, value: x2, right: r2 = s2.value;
-            
-            let s3=remove_min(l2, x2, r2), m=remove_min(l2, x2, r2);
+            const { left: l2, value: x2, right: r2 } = s2.value;
+            let [s3, m] = remove_min(l2, x2, r2);
             return bal(s1, m, s3);
         }
     }
 }
 function remove<A>(x: A, t: Tree<A>, cmp: (arg0: A, arg1: A) => number): Tree<A> {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return { kind: "Empty", value: {  } };
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: y, right: r = t.value;
-        
+        const { left: l, value: y, right: r } = t.value;
         if (check(cmp(x, y)).kind === "Eq") {
-            const  = check(cmp(x, y)).value;
-            
             return merge(l, r);
         } else if (check(cmp(x, y)).kind === "Lt") {
-            const  = check(cmp(x, y)).value;
-            
             return bal(remove(x, l, cmp), y, r);
         } else if (check(cmp(x, y)).kind === "Gt") {
-            const  = check(cmp(x, y)).value;
-            
             return bal(l, y, remove(x, r, cmp));
         }
     }
 }
 function toList<A>(t: Tree<A>): A[] {
     if (t.kind === "Empty") {
-        const  = t.value;
-        
         return [];
     } else if (t.kind === "Node2") {
-        const height: _, left: l, value: y, right: r = t.value;
-        
+        const { left: l, value: y, right: r } = t.value;
         return [...toList(l), y, ...toList(r)];
     }
 }

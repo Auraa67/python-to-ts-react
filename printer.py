@@ -112,7 +112,13 @@ def str_of_exp(e: exp, paren: bool = True) -> str:
         case Cond(value=value, test=test, orelse=orelse):
             return par(str_of_exp(test) + " ? " + str_of_exp(value) + " : " + str_of_exp(orelse))
         case Call(func=func, args=args):
-            return func + "(" + ", ".join(map(lambda arg: str_of_exp(arg), args)) + ")"
+            if func in primitives:
+                name, obj_idx = primitives[func]
+                if obj_idx is not None:
+                    obj = str_of_exp(args[obj_idx])
+                    return f"{obj}.{name}()"
+                return f"{name}(" + ", ".join(map(str_of_exp, args)) + ")"
+            return func + "(" + ", ".join(map(str_of_exp, args)) + ")"
         case Lambda(args=args, body=body):
             return par("(" + ", ".join(args) + ") => " + str_of_exp(body))
         case Tuple(exps=exps):
@@ -166,11 +172,28 @@ def str_of_comm(depth: int, c: comm) -> str:
             )
         case MatchData(subject=subject, cases=cases):
             subject_str = str_of_exp(subject)
-            return (
-                newline(depth) + " else ".join(map(lambda x: "if (" + subject_str + ".kind === \"" + x[0] + "\") {" +
-                newline(depth + 1) + "const " + ", ".join(map(lambda y: f"{y[0]}: {y[1]}", x[1])) + " = " + subject_str + ".value;" +
-                newline(depth + 1) + str_of_block(depth + 1, x[2]) + newline(depth) + "}", cases))
-            )
+            def str_of_case(c):
+                tag, bindings, body = c
+                bind_line = ""
+                if bindings:
+                    s_bind = ", ".join(map(lambda y: f"{y[0]}: {y[1]}", bindings))
+                    bind_line = f"{newline(depth + 1)}const {{ {s_bind} }} = {subject_str}.value;"
+                
+                return (
+                    f"if ({subject_str}.kind === \"{tag}\") {{" +
+                    bind_line + 
+                    str_of_block(depth + 1, body) + 
+                    newline(depth) + "}"
+                )
+            
+            return newline(depth) + " else ".join(map(str_of_case, cases))
+        # case MatchData(subject=subject, cases=cases):
+        #     subject_str = str_of_exp(subject)
+        #     return (
+        #         newline(depth) + " else ".join(map(lambda x: "if (" + subject_str + ".kind === \"" + x[0] + "\") {" +
+        #         newline(depth + 1) + "const " + ", ".join(map(lambda y: f"{y[0]}: {y[1]}", x[1])) + " = " + subject_str + ".value;" +
+        #         newline(depth + 1) + str_of_block(depth + 1, x[2]) + newline(depth) + "}", cases))
+        #     )
         case Return(value=value):
             return newline(depth) + "return " + str_of_exp(value) + ";"
         case Raise(exn=exn, exps=exps):
@@ -208,8 +231,10 @@ def str_of_decl(depth: int, d: decl) -> str:
         case TypedVar(id=id, ty=ty, value=value):
             return (newline(depth) + "const " + id + ": " + str_of_typ(ty) + " = " + str_of_exp(value, paren=False))
         case Import(module=module):
+            if module in ignored_imports: return ""
             return (newline(depth) + "import * as " + module + " from \"./" + module + "\";")
         case ImportFrom(module=module, names=names):
+            if module in ignored_imports: return ""
             return (newline(depth) + "import { " + ", ".join(names) + " } from \"./" + module + "\";")
         case InitVars(ids=ids, value=value):
             return  (newline(depth) + "let " + ", ".join(map(lambda x: x + "=" + str_of_exp(value), ids)) + ";")

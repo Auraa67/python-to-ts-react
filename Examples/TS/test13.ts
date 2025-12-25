@@ -1,4 +1,3 @@
-import { dataclass } from "./dataclasses";
 interface Point{
     x: number;
     y: number;
@@ -8,4 +7,4 @@ function init(z: number): Point {
     return { kind: "Point", value: { x: z, y: z } };
 }
 
-print(pt.y)
+console.log(pt.y)

@@ -1,4 +1,3 @@
-import { dataclass, replace } from "./dataclasses";
 interface Point{
     x: number;
     y: number;
@@ -9,4 +8,4 @@ function init(z: number): Point {
 }
 const pt2: Point = {...pt, y: 10}
 
-print(pt2)
+console.log(pt2)

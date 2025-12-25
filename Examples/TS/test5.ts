@@ -1,5 +1,3 @@
-import { dataclass } from "./dataclasses";
-import { Callable } from "./collections.abc";
 type Tree<A, B> = Leaf<A, B> | LNode<A, B>;
 interface Leaf<A, B> {
     value: A;
@@ -18,16 +16,11 @@ function max(x: number, y: number): number {
 }
 function size(t: Tree<number, boolean>): number {
     if (t.kind === "Leaf") {
-        const value: _ = t.value;
-        
         return 1;
     } else if (t.kind === "LNode") {
-        const value: x, left: l, right: r = t.value;
-        
+        const { value: x, left: l, right: r } = t.value;
         return max(size(l), size(r));
     } else if (t.kind === "_") {
-        const  = t.value;
-        
         return 1;
     }
 }
@@ -50,7 +43,7 @@ function concat<A>(l1: A[], l2: A[]): A[] {
     }
 }
 function first<A, B>(z: [A, B]): A {
-    let x=z, y=z;
+    let [x, y] = z;
     return x;
 }
 function f5<A, B, C>(f: (arg0: A) => B, g: (arg0: B) => C): (arg0: A) => C {
@@ -77,8 +70,8 @@ function split<A, B>(l: [A, B][]): [A[], B[]] {
     } else {
         const h= l[0];
         const t= l.slice(1);
-        let l1=split(t), l2=split(t);
-        let h1=h, h2=h;
+        let [l1, l2] = split(t);
+        let [h1, h2] = h;
         return [[h1, ...l1], [h2, ...l2]];
     }
 }

@@ -1,5 +1,3 @@
-import { Callable } from "./collections.abc";
-import { dataclass } from "./dataclasses";
 import { string_of_int } from "./test14";
 type Tree<A> = Leaf<A> | LNode<A>;
 interface Leaf<A> {
@@ -16,12 +14,9 @@ interface Node2<A, B> {
 }
 function size<A>(t: Tree<A>): number {
     if (t.kind === "Leaf") {
-        const value: _ = t.value;
-        
         return 1;
     } else if (t.kind === "LNode") {
-        const left: l, right: r = t.value;
-        
+        const { left: l, right: r } = t.value;
         return (size(l) + size(r));
     }
 }
@@ -29,7 +24,6 @@ function length<A>(l: A[]): number {
     if (l.length === 0) {
         return 0;
     } else {
-        const _= l[0];
         const t= l.slice(1);
         return (1 + length(t));
     }
@@ -38,8 +32,6 @@ function is_empty<A>(l: A[]): boolean {
     if (l.length === 0) {
         return true;
     } else {
-        const _= l[0];
-        const _= l.slice(1);
         return false;
     }
 }
@@ -85,12 +77,10 @@ function concat<A>(l1: A[], l2: A[]): A[] {
 }
 function to_list<A>(t: Tree<A>): A[] {
     if (t.kind === "Leaf") {
-        const value: v = t.value;
-        
+        const { value: v } = t.value;
         return [v];
     } else if (t.kind === "LNode") {
-        const left: l, right: r = t.value;
-        
+        const { left: l, right: r } = t.value;
         return [...to_list(l), ...to_list(r)];
     }
 }
@@ -109,8 +99,8 @@ function unzip<A, B>(l: [A, B][]): [A[], B[]] {
     } else {
         const h= l[0];
         const t= l.slice(1);
-        let h1=h, h2=h;
-        let t1=unzip(t), t2=unzip(t);
+        let [h1, h2] = h;
+        let [t1, t2] = unzip(t);
         return [[h1, ...t1], [h2, ...t2]];
     }
 }
@@ -139,4 +129,4 @@ const s = length(lst)
 const l3: [number, number][] = [[21, 43], [56, 78]]
 const s42 = string_of_int(42)
 
-print(s42)
+console.log(s42)

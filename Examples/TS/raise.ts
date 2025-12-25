@@ -6,11 +6,11 @@ function main(): string {
         return f();
     } catch (err) {
         if (err instanceof TypeError) {
-            return ("Type error: " + str(err));
+            return ("Type error: " + err.toString());
         } else {
             throw err;
         }
     }
 }
 
-print(main())
+console.log(main())

@@ -1,4 +1,3 @@
-import { Callable } from "./collections.abc";
 function f1(x: number): number {
     return (x * 2);
 }

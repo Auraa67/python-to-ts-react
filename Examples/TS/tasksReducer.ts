@@ -1,5 +1,3 @@
-import { dataclass } from "./dataclasses";
-import { Callable } from "./collections.abc";
 interface Task{
     id: number;
     text: string;
@@ -41,16 +39,13 @@ function filter<A>(f: (arg0: A) => boolean, l: A[]): A[] {
 }
 function tasksReducer(tasks: State, action: Action): State {
     if (action.kind === "Added") {
-        const id: id, text: text = action.value;
-        
+        const { id: id, text: text } = action.value;
         return [...tasks, { kind: "Task", value: { id: id, text: text, done: false } }];
     } else if (action.kind === "Changed") {
-        const task: task = action.value;
-        
+        const { task: task } = action.value;
         return map(((t) => ((t.id == task.id) ? task : t)), tasks);
     } else if (action.kind === "Deleted") {
-        const id: id = action.value;
-        
+        const { id: id } = action.value;
         return filter(((t) => (!(t.id == id))), tasks);
     }
 }
