@@ -171,12 +171,12 @@ def str_of_comm(depth: int, c: comm) -> str:
 				str_of_block(depth + 1, orelse) + newline(depth) + "}"
 			)
 		case MatchData(subject=subject, cases=cases):
-		    subject_str = str_of_exp(subject)
-		    return (
-		        newline(depth) + " else ".join(map(lambda x: "if (" + subject_str + ".kind === \"" + x[0] + "\") {" +
-		        newline(depth + 1) + "const " + ", ".join(map(lambda y: f"{y[0]}: {y[1]}", x[1])) + " = " + subject_str + ".value;" +
-		        newline(depth + 1) + str_of_block(depth + 1, x[2]) + newline(depth) + "}", cases))
-		    )
+			subject_str = str_of_exp(subject)
+			return (
+				newline(depth) + " else ".join(map(lambda x: "if (" + subject_str + ".kind === \"" + x[0] + "\") {" +
+				newline(depth + 1) + "const " + ", ".join(map(lambda y: f"{y[0]}: {y[1]}", x[1])) + " = " + subject_str + ".value;" +
+				newline(depth + 1) + str_of_block(depth + 1, x[2]) + newline(depth) + "}", cases))
+			)
 		case Return(value=value):
 			return newline(depth) + "return " + str_of_exp(value) + ";"
 		case Raise(exn=exn, exps=exps):
