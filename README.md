@@ -1,60 +1,140 @@
 # python-to-ts-react
 
-Cette première version du projet consiste à implémenter un Pretty-Printer
-L'outil est capable d'analyser une structure d'arbre syntaxique abstrait (AST) et de générer du code Python indenté et typé, avec pour objectif final la conversion vers TypeScript/React.
+Un outil de conversion de code Python typé vers TypeScript/React.
 
-Implémentation de diverses fonctionnalités au sein de pretty.py:
+## Description
 
-1. Types (str_of_typ)
-Primitifs : IntType, BoolType, StrType, AnyType, NoneType.
+Ce projet implémente un compilateur qui analyse du code Python typé et le convertit en TypeScript. L'outil utilise un Pretty-Printer pour analyser la structure d'arbre syntaxique abstrait (AST) et générer du code TypeScript idiomatique.
 
-Composites et Génériques : ListType, TypeName (classes/alias), ParamType (ex: Tree[int]).
+## Prérequis
 
-2. Expressions (str_of_exp)
-Constantes : NoneCst, IntCst, StrCst, BoolCst.
+- Python 3.10 ou supérieur (pour le support de la syntaxe moderne avec `match/case` et génériques)
+- Aucune dépendance externe requise (utilise uniquement la bibliothèque standard Python)
 
-Opérations Binaires : Arithmétique (Plus, Minus, Times), Comparaisons (Equal, Less...), Logique (And, Or).
+## Installation
 
-Opérations Unaires : Not, Spread.
+```bash
+# Cloner le repository
+git clone https://github.com/Auraa67/python-to-ts-react.git
+cd python-to-ts-react
+```
 
-Structures de données : List, Tuple, Record, Subscript, Slice.
+## Usage
 
-Fonctionnel : Call, Lambda, Cond.
+### Conversion Python → TypeScript
 
-3. Commandes (str_of_comm)
-Flux de contrôle : IfThenElse, Return.
+Pour convertir un fichier Python en TypeScript :
 
-Pattern Matching : MatchList (sur listes), MatchData (sur classes).
+```bash
+python3 main.py <fichier.py>
+```
 
-Exceptions : TryExcept, Raise.
+**Exemple :**
+```bash
+python3 main.py Examples/test0.py
+```
 
-4. Déclarations (str_of_decl)
-Structures : FunDef (fonctions typées), DataClass (@dataclass), TypeAlias.
+**Sortie TypeScript :**
+```typescript
+function compose<A, B, C>(f: (arg0: A) => B, g: (arg0: B) => C): (arg0: A) => C {
+    return ((x) => g(f(x)));
+}
+```
 
-Environnement : Import, ImportFrom, TypedVar, InitVar.
+### Pretty-Printing Python
 
-Tests et Validation
+Pour reformater et afficher un fichier Python :
 
-Le projet compile et s'exécute avec succès via le Makefile. La validation a été effectuée à la fois sur les tests fournis et sur mes tests personnels (dans le répertoire my_test), qui ont tous été passés avec succès.
+```bash
+python3 main.py --pretty <fichier.py>
+```
 
-Voici un guide rapide à ajouter à votre documentation ou pour votre propre usage :
+**Exemple :**
+```bash
+python3 main.py --pretty Examples/test0.py
+```
 
-Guide de Tests Rapide
+### Autres Options
 
-NB: les tests se trouvent dans le dossier Examples.
+- `--parse` : Afficher l'AST d'un fichier source
+- `--regions` : Afficher l'AST avec les régions
+- `--check` : Vérifier que deux fichiers ont le même AST
 
-1. Lancer la suite de tests fournie (Makefile) Pour exécuter automatiquement la validation sur les fichiers de tests par défaut :
+```bash
+# Afficher l'AST
+python3 main.py --parse Examples/test0.py
 
+# Comparer deux fichiers
+python3 main.py --check file1.py file2.py
+```
+
+## Fonctionnalités Supportées
+
+### 1. Types (str_of_typ)
+- **Primitifs** : `IntType`, `BoolType`, `StrType`, `AnyType`, `NoneType`
+- **Composites et Génériques** : `ListType`, `TypeName` (classes/alias), `ParamType` (ex: `Tree[int]`)
+
+### 2. Expressions (str_of_exp)
+- **Constantes** : `None`, entiers, chaînes, booléens
+- **Opérations Binaires** : Arithmétique (`+`, `-`, `*`), Comparaisons (`==`, `<`, etc.), Logique (`and`, `or`)
+- **Opérations Unaires** : `not`, spread (`...`)
+- **Structures de données** : Listes, tuples, records, subscript, slice
+- **Fonctionnel** : Appels de fonction, lambda, expressions conditionnelles
+
+### 3. Commandes (str_of_comm)
+- **Flux de contrôle** : `if/then/else`, `return`
+- **Pattern Matching** : Matching sur listes et classes
+- **Exceptions** : `try/except`, `raise`
+
+### 4. Déclarations (str_of_decl)
+- **Structures** : Définitions de fonctions typées, `@dataclass`, alias de types
+- **Environnement** : `import`, `from...import`, variables typées, variables d'initialisation
+
+## Tests
+
+Les fichiers de test se trouvent dans le dossier `Examples/`.
+
+### Exécuter la suite complète de tests
+
+```bash
+cd Examples
 make
+```
 
-Cela génère les sorties et vérifie la correspondance des arbres syntaxiques (AST).
+Cette commande :
+1. Génère les fichiers Python formatés dans `PY/`
+2. Génère les fichiers TypeScript convertis dans `TS/`
+3. Vérifie la correspondance des AST
 
-2. Lancer les tests personnels (my_test/):
+### Tester un fichier spécifique
 
-Visualiser le code généré :
+```bash
+# Visualiser le code généré
+python3 main.py --pretty Examples/test0.py
 
-python3 main.py --pretty my_test/points.py
+# Vérifier et exécuter le résultat
+python3 main.py --pretty Examples/test0.py | python3
 
-Vérifier et exécuter le résultat (Test complet) :
+# Convertir en TypeScript
+python3 main.py Examples/test0.py > output.ts
+```
 
-python3 main.py --pretty my_test/points.py | python3
+## Structure du Projet
+
+```
+.
+├── main.py           # Point d'entrée principal
+├── parsers.py        # Analyseur syntaxique Python
+├── pretty.py         # Pretty-Printer pour Python
+├── printer.py        # Générateur de code TypeScript
+├── absyn.py          # Définitions de l'AST
+├── util.py           # Utilitaires
+├── error.py          # Gestion des erreurs
+└── Examples/         # Fichiers de test et exemples
+    ├── test*.py      # Tests unitaires
+    └── Makefile      # Automation des tests
+```
+
+## Validation
+
+Le projet a été validé avec succès sur l'ensemble des tests fournis. Tous les tests passent et la génération de code TypeScript est fonctionnelle.
