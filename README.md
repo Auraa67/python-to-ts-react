@@ -64,8 +64,8 @@ python3 main.py --pretty Examples/test0.py
 # Afficher l'AST
 python3 main.py --parse Examples/test0.py
 
-# Comparer deux fichiers
-python3 main.py --check file1.py file2.py
+# Comparer deux fichiers (vérifier que l'AST est identique)
+python3 main.py --check Examples/test0.py Examples/PY/test0.py
 ```
 
 ## Fonctionnalités Supportées
