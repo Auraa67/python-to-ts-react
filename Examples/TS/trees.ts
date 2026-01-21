@@ -22,9 +22,12 @@ function max(x: number, y: number): number {
 }
 function size(t: Tree<number, string>): number {
     if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
         return 1;
     } else if (t.kind === "LNode") {
-        const { left: l, right: r } = t.value;
+        const value: _, left: l, right: r = t.value;
+        
         return (1 + max(size(l), size(r)));
     }
 }

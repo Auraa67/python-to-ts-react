@@ -15,21 +15,28 @@ function max(x: number, y: number): number {
     }
 }
 function first<A, B>(z: [A, B]): A {
-    let [x, _] = z;
+    let x=z, _=z;
     return x;
 }
 function size(t: Tree<number, string>): number {
     if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
         return 1;
     } else if (t.kind === "LNode") {
-        const { left: l, right: r } = t.value;
+        const value: _, left: l, right: r = t.value;
+        
         return (1 + max(size(l), size(r)));
     }
 }
 function simple(t: Tree<number, string>): boolean {
     if (t.kind === "Leaf") {
+        const value: _ = t.value;
+        
         return true;
     } else if (t.kind === "_") {
+        const  = t.value;
+        
         return false;
     }
 }

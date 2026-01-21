@@ -2,8 +2,8 @@ function length<A>(l: A[]): number {
     if (l.length === 0) {
         return 0;
     } else {
-        const h= l[0];
-        const t= l.slice(1);
+        const h = l[0];
+        const t = l.slice(1);
         return (1 + length(t));
     }
 }
