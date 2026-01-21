@@ -21,6 +21,8 @@ cd python-to-ts-react
 
 ## Usage
 
+**Note:** Les commandes suivantes doivent être exécutées depuis le répertoire racine du projet.
+
 ### Conversion Python → TypeScript
 
 Pour convertir un fichier Python en TypeScript :
@@ -95,6 +97,8 @@ python3 main.py --check Examples/test0.py Examples/PY/test0.py
 Les fichiers de test se trouvent dans le dossier `Examples/`.
 
 ### Exécuter la suite complète de tests
+
+Depuis le répertoire racine du projet :
 
 ```bash
 cd Examples
